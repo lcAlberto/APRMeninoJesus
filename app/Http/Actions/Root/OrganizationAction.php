@@ -44,13 +44,4 @@ class OrganizationAction {
         Organization::destroy($id);
         return $this->model->all();
     }
-//
-//    public function enableOrganization($organization)
-//    {
-//        if (!$this->guard()->user()->organization_id); {
-//            $data = $this->user->findOrFail($this->guard()->user()->id);
-//            $data->organization_id = $organization->id;
-//        dd($data);
-//        }
-//    }
 }
