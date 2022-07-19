@@ -16,6 +16,7 @@ use App\Http\Requests\LoginApiRequest;
 use App\Models\User;
 use function PHPUnit\Framework\returnArgument;
 use App\Http\Requests\RegisterApiRequest;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -109,6 +110,7 @@ class AuthController extends Controller
 
     public function createOrganization(OrganizationRequest $request)
     {
+        $messages = $request->messages();
         try {
             $data = $request->all();
             $organization = $this->action->createOrganization($data);
@@ -120,7 +122,11 @@ class AuthController extends Controller
                 'data' => $organization
             ];
         } catch (\Exception $e) {
-            return $e;
+            return [
+                'error_message' => $e->getMessage(),
+                'error_code' => $e->getCode(),
+                'request_messages' => $messages
+            ];
         }
     }
 
