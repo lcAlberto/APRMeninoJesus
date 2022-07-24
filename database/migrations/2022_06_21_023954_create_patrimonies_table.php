@@ -17,16 +17,16 @@ class CreatePatrimoniesTable extends Migration
             $table->id();
             $table->string('code')->nullable(); // número do patrimonio
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('type');
             $table->string('purchased_value');
             $table->string('current_value');
             $table->timestamp('acquisition_date');
             $table->timestamp('sale_date')->nullable();
-            $table->timestamp('license_plate')->nullable(); // placa do veículo
-            $table->timestamp('chassis_number')->nullable(); // placa do veículo
-            $table->timestamp('brand')->nullable(); // placa do veículo
-            $table->timestamp('model')->nullable(); // placa do veículo
+            $table->string('license_plate')->nullable(); // placa do veículo
+            $table->string('chassis_number')->nullable(); // placa do veículo
+            $table->string('brand')->nullable(); // placa do veículo
+            $table->string('model')->nullable(); // placa do veículo
 
             $table->foreignId('organization_id')->constrained('organizations');
 

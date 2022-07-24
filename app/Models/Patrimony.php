@@ -19,7 +19,7 @@ class Patrimony extends Model
         'chassis_number',
         'brand',
         'model',
-        'orgaization_id'
+        'organization_id'
     ];
 
     protected $searchBy = [

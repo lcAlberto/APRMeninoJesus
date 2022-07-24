@@ -11,3 +11,9 @@ Route::post('partners', 'PartnersController@store');
 Route::get('partner/{id}', 'PartnersController@show');
 Route::put('partner/{id}', 'PartnersController@update');
 Route::delete('partner/{id}', 'PartnersController@destroy');
+
+Route::get('patrimonies', 'PatrimoniesController@index');
+Route::post('patrimonies', 'PatrimoniesController@store');
+Route::get('patrimony/{id}', 'PatrimoniesController@show');
+Route::put('patrimony/{id}', 'PatrimoniesController@update');
+Route::delete('patrimony/{id}', 'PatrimoniesController@destroy');
