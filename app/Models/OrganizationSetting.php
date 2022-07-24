@@ -9,7 +9,7 @@ class OrganizationSetting extends Model
     protected $fillable = [
         'max_loan_time',
         'is_light_theme',
-        'orgaization_id',
+        'organization_id',
         'user_id'
     ];
 }

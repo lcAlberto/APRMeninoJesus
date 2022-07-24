@@ -11,6 +11,6 @@ class Borrowing extends Model
         'end_date',
         'patrimony_id',
         'user_id',
-        'orgaization_id'
+        'organization_id'
     ];
 }
