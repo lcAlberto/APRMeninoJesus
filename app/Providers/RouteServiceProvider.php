@@ -178,7 +178,7 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapAdminApiRoutes()
     {
-        Route::namespace($this->apiNamespace . '\Root')
+        Route::namespace($this->apiNamespace . '\Admin')
             ->middleware(['jwt.verify', 'auth', 'role:' . UserRolesEnum::ADMIN])
             ->group(function () {
                 Route::name('ajax.admin.')

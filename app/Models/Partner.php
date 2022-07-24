@@ -10,6 +10,8 @@ class Partner extends Model
         'name',
         'cpf',
         'rg',
+        'phone',
+        'email',
         'nis',
         'spouses_name',
         'mothers_name',
@@ -25,6 +27,21 @@ class Partner extends Model
         'state_id',
         'city_id',
         'user_id',
-        'orgaization_id'
+        'organization_id'
     ];
+
+    public function organization()
+    {
+        return $this->hasOne(Organization::class);
+    }
+
+    public function state()
+    {
+        return $this->hasOne(State::class);
+    }
+
+    public function city()
+    {
+        return $this->hasOne(City::class);
+    }
 }

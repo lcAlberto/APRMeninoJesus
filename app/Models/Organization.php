@@ -27,4 +27,9 @@ class Organization extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function partners()
+    {
+        return $this->hasMany(Partner::class);
+    }
 }
