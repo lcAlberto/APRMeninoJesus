@@ -8,6 +8,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginApiRequest extends FormRequest
 {
@@ -90,5 +92,28 @@ class LoginApiRequest extends FormRequest
     public function throttleKey()
     {
         return Str::lower($this->input('email')).'|'.$this->ip();
+    }
+
+    public function messages()
+    {
+        return [
+            'required' => 'O campo :attribute é obrigatório',
+            'unique' => ':attribute ja foi cadastrado',
+            'email' => 'O campo :attribute precisa ser um email válido',
+            'min' => 'O campo :attribute precisa ter no mínimo :min caracteres',
+            'max' => 'O campo :attribute precisa ter no máximo :max caracteres',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+
+        $response = response()->json([
+            'message' => 'Campos inválidos',
+            'error_message' => $errors->messages(),
+        ], 422);
+
+        throw new HttpResponseException($response);
     }
 }
