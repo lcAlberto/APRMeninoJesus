@@ -6,5 +6,6 @@
  * Time: 21:17
  */
 
-Route::get('/', 'AuthController@wellcome');
-Route::post('login', 'AuthController@login');
+Route::get('/', 'AuthController@welcome')->name('welcome');
+Route::post('login', 'AuthController@login')->name('login');
+Route::post('/register', 'AuthController@register')->name('register');

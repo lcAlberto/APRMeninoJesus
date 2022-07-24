@@ -138,6 +138,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware(['api'])
             ->namespace($this->apiNamespace)
+            ->prefix('api/v1')
             ->group(base_path('routes/api/v1/shared/unauthenticated.php'));
     }
 
@@ -145,6 +146,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware(['jwt.verify', 'auth'])
             ->namespace($this->apiNamespace)
+            ->prefix('api/v1')
             ->group(base_path('routes/api/v1/shared/authenticated.php'));
     }
 
@@ -152,21 +154,20 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware(['jwt.verify', 'auth'])
             ->namespace($this->apiNamespace)
-            ->prefix('pagination')
+            ->prefix('api/v1/pagination')
             ->group(base_path('routes/api/v1/shared/pagination.php'));
     }
 
     protected function mapRootApiRoutes()
     {
         Route::namespace($this->apiNamespace . '\Root')
-            ->middleware(['jwt.verify', 'auth', 'role:' . UserRolesEnum::ROOT])
+            ->middleware(['jwt.auth', 'role:' . UserRolesEnum::ROOT])
             ->group(function () {
                 Route::name('ajax.root.')
                     ->prefix('ajax/root')
                     ->group(base_path('routes/api/v1/root/ajax.php'));
 
-                Route::name('root.')
-                    ->prefix('root')
+                Route::prefix('root')
                     ->group(base_path('routes/api/v1/root/authenticated.php'));
 
                 Route::name('root.pagination.')
