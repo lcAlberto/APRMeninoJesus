@@ -24,6 +24,16 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    public function management()
+    {
+        return $this->hasOne(Management::class);
+    }
+
     public function guardName(){
         return "web";
     }

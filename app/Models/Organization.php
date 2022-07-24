@@ -32,4 +32,9 @@ class Organization extends Model
     {
         return $this->hasMany(Partner::class);
     }
+
+    public function patrimony()
+    {
+        return $this->hasMany(Partner::class);
+    }
 }

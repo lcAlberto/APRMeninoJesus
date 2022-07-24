@@ -21,6 +21,10 @@ class CreateManagementTable extends Migration
             $table->boolean('isCurrent');
 
             $table->foreignId('organization_id')->constrained('organizations');
+            $table->foreignId('president_id')->constrained('users');
+            $table->foreignId('vice_president_id')->constrained('users');
+            $table->foreignId('treasurer_id')->constrained('users');
+            $table->foreignId('vice_treasurer_id')->constrained('users');
 
             $table->timestamps();
         });

@@ -17,3 +17,9 @@ Route::post('patrimonies', 'PatrimoniesController@store');
 Route::get('patrimony/{id}', 'PatrimoniesController@show');
 Route::put('patrimony/{id}', 'PatrimoniesController@update');
 Route::delete('patrimony/{id}', 'PatrimoniesController@destroy');
+
+Route::get('managements', 'ManagementController@index');
+Route::post('managements', 'ManagementController@store');
+Route::get('management/{id}', 'ManagementController@show');
+Route::put('management/{id}', 'ManagementController@update');
+Route::delete('management/{id}', 'ManagementController@destroy');

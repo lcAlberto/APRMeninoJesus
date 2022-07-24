@@ -27,4 +27,9 @@ class Patrimony extends Model
     ];
 
     protected $dates = ['deleted_at'];
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
 }
