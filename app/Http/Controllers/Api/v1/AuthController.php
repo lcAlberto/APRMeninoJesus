@@ -56,7 +56,7 @@ class AuthController extends Controller
     public function register(RegisterApiRequest $request)
     {
         try {
-            $data = $request->validated();
+            $data = $request->only('name', 'email', 'password', 'img_profile');
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],

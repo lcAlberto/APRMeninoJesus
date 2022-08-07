@@ -17,6 +17,7 @@ class CreateBorrowingsTable extends Migration
             $table->id();
             $table->timestamp('start_date');
             $table->timestamp('end_date');
+            $table->string('description')->nullable();
 
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('organization_id')->constrained('organizations');

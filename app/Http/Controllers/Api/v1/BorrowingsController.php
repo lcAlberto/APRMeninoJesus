@@ -1,26 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\Admin;
+namespace App\Http\Controllers\Api\v1;
 
-use App\Enums\UserRolesEnum;
-use App\Http\Actions\Admin\PartnerAction;
+use App\Http\Actions\Shared\BorrowingsAction;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\PartnerRequest;
-use App\Models\Partner;
-use Illuminate\Http\Request;
+use App\Http\Requests\Shared\BorrowingsRequest;
+use App\Models\Borrowing;
 
-class PartnersController extends Controller
+class BorrowingsController extends Controller
 {
     private $action = null;
 
     public function __construct()
     {
-        $this->action = new PartnerAction();
+        $this->action = new BorrowingsAction();
     }
 
     public function index()
     {
-        return Partner::all();
+        return Borrowing::all();
     }
 
     public function create()
@@ -28,14 +26,11 @@ class PartnersController extends Controller
         //
     }
 
-    public function store(PartnerRequest $request)
+    public function store(BorrowingsRequest $request)
     {
         try {
             $data = $request->validated();
-            $partner = $this->action->createPartner($data);
-            if (!$partner->hasRole(UserRolesEnum::PARTNER)) {
-                $partner->assignRole(UserRolesEnum::PARTNER);
-            }
+            $partner = $this->action->createBorrowing($data);
             return [
                 'status' => '200',
                 'data' => $partner
@@ -48,9 +43,9 @@ class PartnersController extends Controller
         }
     }
 
-    public function show(Partner $model, $id)
+    public function show($id)
     {
-        return $model->findOrFail($id);
+        return Borrowing::findOrFail($id);
     }
 
     public function edit($id)
@@ -58,14 +53,11 @@ class PartnersController extends Controller
         //
     }
 
-    public function update(PartnerRequest $request, $id)
+    public function update(BorrowingsRequest $request, $id)
     {
         try {
             $data = $request->validated();
-            $partner = $this->action->editPartner($data, $id);
-            if (!$partner->hasRole(UserRolesEnum::PARTNER)) {
-                $partner->assignRole(UserRolesEnum::PARTNER);
-            }
+            $partner = $this->action->editBorrowing($data, $id);
             return [
                 'status' => '200',
                 'data' => $partner
@@ -81,7 +73,7 @@ class PartnersController extends Controller
     public function destroy($id)
     {
         try {
-            $partner = $this->action->deletePartner($id);
+            $partner = $this->action->deleteBorrowing($id);
             return [
                 'status' => '200',
                 'data' => $partner
