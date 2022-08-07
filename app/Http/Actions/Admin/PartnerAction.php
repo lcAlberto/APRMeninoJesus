@@ -8,6 +8,8 @@
 
 namespace App\Http\Actions\Admin;
 
+use Illuminate\Auth\Events\Registered;
+use App\Enums\UserRolesEnum;
 use App\Models\Organization;
 use App\Models\Partner;
 use App\Models\User;
@@ -51,15 +53,21 @@ class PartnerAction
     public function createPartner($data)
     {
         $partner = $this->prepareData($data);
-        return $this->model->create($partner);
+        $partner = Partner::create($partner);
+        event(new Registered($partner));
+        $partner->assignRole(UserRolesEnum::ADMIN);
+        dd($partner);
+        return $partner;
+
     }
 
     public function editPartner($data, $id)
     {
-        $organization = $this->model->findOrFail($id);
-        $partner = $this->prepareData($data);
-        $organization->update($partner);
-        return $organization;
+        $partner = $this->model->findOrFail($id);
+        $verifiedData = $this->prepareData($data);
+        $partner->update($verifiedData);
+        $partner->syncRoles(UserRolesEnum::PARTNER);
+        return $partner;
     }
 
     public function deletePartner($id)
