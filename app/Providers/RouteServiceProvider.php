@@ -144,7 +144,7 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapAuthenticatedApiRoutes()
     {
-        Route::middleware(['jwt.verify', 'auth'])
+        Route::middleware(['jwt.verify', 'auth', 'verified'])
             ->namespace($this->apiNamespace)
             ->prefix('api/v1')
             ->group(base_path('routes/api/v1/shared/authenticated.php'));
@@ -152,7 +152,7 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapPaginationApiRoutes()
     {
-        Route::middleware(['jwt.verify', 'auth'])
+        Route::middleware(['jwt.verify', 'auth', 'verified'])
             ->namespace($this->apiNamespace)
             ->prefix('api/v1/pagination')
             ->group(base_path('routes/api/v1/shared/pagination.php'));
