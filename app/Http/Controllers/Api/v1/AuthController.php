@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\v1;
 
 
+use App\Enums\VerificationEmailResponsesEnum;
 use App\Http\Actions\Root\OrganizationAction;
 use App\Http\Requests\Root\OrganizationRequest;
+use App\Mail\EmailValidation;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Exception;
@@ -14,6 +16,7 @@ use App\Enums\UserRolesEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginApiRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use function PHPUnit\Framework\returnArgument;
 use App\Http\Requests\RegisterApiRequest;
 use Illuminate\Support\Facades\Validator;
@@ -26,7 +29,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware(
-            'jwt.auth', ['except' => ['login', 'register']]);
+            'jwt.auth', ['except' => ['login', 'register', 'verify']]);
         $this->action = new OrganizationAction();
         $this->user = new User();
     }
@@ -63,12 +66,27 @@ class AuthController extends Controller
                 'password' => Hash::make($data['password']),
                 'img_profile' => data_get($data, 'img_profile', 'no image'),
             ]);
+
+            $numbers = rand(100, 10000);
+            $words = range('A', 'Z');
+
+            $userData = [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'code' => array_rand(array_flip($words)) . $numbers . array_rand(array_flip($words))
+            ];
+
             if ($token = $this->guard()->attempt($data)) {
                 if (!$user->hasRole(UserRolesEnum::ADMIN)) {
                     $user->assignRole(UserRolesEnum::ADMIN);
                 }
                 event(new Registered($user));
+
+                Mail::to($userData['email'])->send(new EmailValidation($userData));
+
                 Auth::login($user);
+
                 return $this->respondWithToken($token, $request->get('keep_login'), $user);
             }
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -78,6 +96,27 @@ class AuthController extends Controller
                 'message:' => 'Internal Server Error'
             ], 500);
         }
+    }
+
+    public function verify(Request $request, $userId)
+    {
+//        dd($request->hasValidSignature());
+        $user = User::findOrFail($userId);
+
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
+        return 'oks';
+    }
+
+    public function resend() {
+        if (auth()->user()->hasVerifiedEmail()) {
+            return $this->respondBadRequest(VerificationEmailResponsesEnum::EMAIL_ALREADY_VERIFIED);
+        }
+
+        auth()->user()->sendEmailVerificationNotification();
+
+        return $this->respondWithMessage("Email verification link sent on your email id");
     }
 
     public function me()
